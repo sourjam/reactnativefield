@@ -92,3 +92,4 @@
 
   - Now it's time to create a simple welcome screen that can create an email/pass login for Firebase
   - Fiddled with MainTabNavigator and it seems that the order of the tabs on the bottom are directly related to the order they are pushed into the navigator. However, I do want a separate screen before even showing the app itself.
+  - Styling with React Native is certainly not CSS. Nested Flex is kinda weird here. I had to set a maxHeight on a nested flex section for the input label and input field. Otherwise it forced the entire element to the height of the screen.
