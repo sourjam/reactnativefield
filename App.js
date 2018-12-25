@@ -3,18 +3,19 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
 import firebase from 'react-native-firebase';
+import WelcomeScreen from './screens/WelcomeScreen';
 
 
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
+    isSignedIn: false,
   };
 
   componentDidMount() {
     let auth = firebase.auth();
     auth.onUserChanged((user) => {
-      console.log('hi', user)
-
+      // console.log('now we have an anon user', user)
     })
     auth.signInAnonymously();
   }
@@ -28,6 +29,12 @@ export default class App extends React.Component {
           onFinish={this._handleFinishLoading}
         />
       );
+    } else if (this.state.isLoadingComplete && !this.state.isSignedIn) {
+      return (
+        <WelcomeScreen
+          onSignIn={this._handleFinishSignIn}
+         />
+      );
     } else {
       return (
         <View style={styles.container}>
@@ -36,6 +43,10 @@ export default class App extends React.Component {
         </View>
       );
     }
+  }
+
+  _handleFinishSignIn = () => {
+    this.setState({ isSignedIn: true });
   }
 
   _loadResourcesAsync = async () => {

@@ -102,6 +102,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    backgroundColor: 'black',
   },
   developmentModeText: {
     marginBottom: 20,
