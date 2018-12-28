@@ -96,8 +96,10 @@ export default class HomeScreen extends React.Component {
   }
 
   _handleSignOut = () => {
-    core.signOutAccount();
-    this.props.navigation.navigate('Auth');
+    core.signOutAccount().then(success => {
+      console.log('hi', success)
+      this.props.navigation.navigate('Auth');
+    });
   }
 
   _handleLearnMorePress = () => {

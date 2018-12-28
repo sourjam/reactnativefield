@@ -11,7 +11,7 @@ const _log = (message) => {
 }
 
 // FIREBASE
-// Firebase is currently intended to be used for auth and analytics and data store
+// Firebase is currently intended to be used for auth and analytics and data storage
 import firebase from 'react-native-firebase';
 
 // AUTH
