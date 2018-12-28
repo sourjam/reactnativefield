@@ -98,4 +98,11 @@
   - Added sign in and create account via Firebase Auth. Was running into issues where context was being lost inside of the WelcomeScreen. I'm still not sure what happened there but instead just created some methods to pass down into it.
   - I'm trying to focus on the functional core/imperative shell development style. Where the I now have a CoreService that handles data. Which then has exposed methods that will be used by React to handle changing the view. Actual business logic should only live inside of the Core.
     - Most of the additional functions inside of screens should just be focused on handling the passing in and passing out of data
-  - Now that the welcome screen is functional and users are created in Firebase, I'm going to create an Onboarding step and store user data inside of Firebase to check whether they should see the Onboarding step on login 
+  - Now that the welcome screen is functional and users are created in Firebase, I'm going to create an Onboarding step and store user data inside of Firebase to check whether they should see the Onboarding step on login
+
+# Database
+
+  12.28.2018
+  - Welp turns out I need to add another Pod...
+  - Welp turns out I installed the wrong Pod...
+    - There is now a firebase database and firebase firestore. Firestore is in Beta and is the latest greatest...

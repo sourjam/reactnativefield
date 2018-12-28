@@ -12,10 +12,18 @@ import { WebBrowser } from 'expo';
 
 import { MonoText } from '../components/StyledText';
 
+
+import Core from './../services/Core';
+const core = new Core();
+
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
+
+  componentDidMount() {
+
+  }
 
   render() {
     return (

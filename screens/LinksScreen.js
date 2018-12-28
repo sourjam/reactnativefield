@@ -2,6 +2,9 @@ import React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { ExpoLinksView } from '@expo/samples';
 
+import Core from './../services/Core';
+const core = new Core();
+
 export default class LinksScreen extends React.Component {
   static navigationOptions = {
     title: 'Links',

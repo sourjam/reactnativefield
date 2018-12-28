@@ -14,19 +14,54 @@ const _log = (message) => {
 // Firebase is currently intended to be used for auth and analytics and data store
 import firebase from 'react-native-firebase';
 
+// AUTH
 // https://firebase.google.com/docs/auth/web/start
 const auth = firebase.auth();
 
+const _userChangeHandler = (user) => {
+  if (!user.isAnonymous) {
+    _log('user is real: ' + Object.keys(user) );
+  } else {
+    _log('user is Anonymous: ' + user.isAnonymous );
+  }
+}
+
 const _firebaseAuthStart = () => {
   // start by watching for user status changing
+  // probably not needed tbh
   auth.onUserChanged(_userChangeHandler);
 }
 
-const _userChangeHandler = (user) => {
-  _log('user is Anonymous: ' + user.isAnonymous )
-  if (!user.isAnonymous) {
-    _log('user is real: ' + Object.keys(user) )
-  }
+// DATABASE
+// https://firebase.google.com/docs/database/web/start
+const firestore = firebase.firestore();
+const userCollectionRef = firestore.collection('users');
+
+const _firebaseInitUserData = (uid) => {
+  return new Promise((resolve, reject) => {
+    userCollectionRef.doc(uid).set({
+      onboard: false
+    })
+    .then(() => {
+      resolve(true);
+    })
+    .catch((err) => {
+      reject(err);
+    })
+  })
+}
+
+const _firebaseGetUserData = (uid) => {
+  return new Promise((resolve, reject) => {
+    _log('getting user data for: ' + uid);
+    userCollectionRef.doc(uid).get().then(doc => {
+      if (!doc._data) {
+        resolve({data: false});
+      } else {
+        resolve({data: doc._data});
+      }
+    });
+  });
 }
 
 // CORE SERVICE
@@ -36,15 +71,27 @@ const startTasks = [
   _firebaseAuthStart,
 ]
 
+const startTasksMemo = () => {
+  let tasksDone = false;
+  return () => {
+    if (!tasksDone) {
+      startTasks.forEach((task) => {
+        if (typeof task === 'function') {
+          task.apply();
+        } else {
+          _log('calling:' + task);
+        }
+      });
+      tasksDone = true;
+    }
+  }
+}
+
+const runStartTasks = startTasksMemo();
+
 export default class CoreService {
   constructor() {
-    startTasks.forEach((task) => {
-      if (typeof task === 'function') {
-        task.apply();
-      } else {
-        _log('calling:' + task);
-      }
-    });
+    runStartTasks();
   }
 
   createAccount(email, password) {
@@ -57,8 +104,20 @@ export default class CoreService {
     return auth.signInWithEmailAndPassword(email, password);
   }
 
+  signOutAccount() {
+    return auth.signOut();
+  }
+
   getCurrentUser() {
     return auth.currentUser;
+  }
+
+  getUserData(uid) {
+    return _firebaseGetUserData(uid);
+  }
+
+  initUserData(uid) {
+    return _firebaseInitUserData(uid);
   }
 
   errorHandler(errObj) {

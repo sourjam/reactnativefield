@@ -5,20 +5,11 @@ import AppNavigator from './navigation/AppNavigator';
 
 import WelcomeScreen from './screens/WelcomeScreen';
 
-import Core from './services/Core'
-const core = new Core();
 
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
-    isSignedIn: false,
   };
-
-  componentDidMount() {
-    // if (!core.getCurrentUser().isAnonymous) {
-    //   this.setState({ isSignedIn: true })
-    // }
-  }
 
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
@@ -29,15 +20,6 @@ export default class App extends React.Component {
           onFinish={this._handleFinishLoading}
         />
       );
-    } else if (this.state.isLoadingComplete && !this.state.isSignedIn) {
-      return (
-        <WelcomeScreen
-          finishSignIn={this._handleFinishSignIn}
-          createAccount={this._handleCreateAccount}
-          signInAccount={this._handleSignInAccount}
-          onError={this._handleWelcomeError}
-         />
-      );
     } else {
       return (
         <View style={styles.container}>
@@ -46,22 +28,6 @@ export default class App extends React.Component {
         </View>
       );
     }
-  }
-
-  _handleWelcomeError = (errObj) => {
-    core.errorHandler('Welcome screen: ' + errObj);
-  }
-
-  _handleCreateAccount = (email, password) => {
-    return core.createAccount(email, password);
-  }
-
-  _handleSignInAccount = (email, password) => {
-    return core.signInAccount(email, password);
-  }
-
-  _handleFinishSignIn = () => {
-    this.setState({ isSignedIn: true });
   }
 
   _loadResourcesAsync = async () => {
