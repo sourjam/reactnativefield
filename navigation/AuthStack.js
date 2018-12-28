@@ -1,9 +1,10 @@
 import React from 'react';
-import { Platform, StatusBar, StyleSheet, View, Text, Button } from 'react-native';
+import { StyleSheet, View, Text, Button } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 
 import Core from './../services/Core';
 const core = new Core();
+
 import WelcomeScreen from './../screens/WelcomeScreen';
 
 class AuthStack extends React.Component {
@@ -11,7 +12,7 @@ class AuthStack extends React.Component {
     super(props);
     let user = core.getCurrentUser();
     this.state = {
-      uid: user.uid
+      uid: user ? user.uid : ''
     }
   }
 
@@ -44,7 +45,7 @@ class AuthStack extends React.Component {
   }
 
   _handleFinishSignIn = () => {
-    this.props.navigation.navigate('Main');
+    this.props.navigation.navigate('Onboarding');
   }
 
   _getUserDataAsync = async () => {

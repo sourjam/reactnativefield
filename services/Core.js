@@ -19,10 +19,12 @@ import firebase from 'react-native-firebase';
 const auth = firebase.auth();
 
 const _userChangeHandler = (user) => {
-  if (!user.isAnonymous) {
+  if (user && !user.isAnonymous) {
     _log('user is real: ' + Object.keys(user) );
-  } else {
+  } else if (user) {
     _log('user is Anonymous: ' + user.isAnonymous );
+  } else {
+    console.log('logged out?')
   }
 }
 

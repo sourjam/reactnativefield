@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Button,
 } from 'react-native';
 import { WebBrowser } from 'expo';
 
@@ -20,10 +21,6 @@ export default class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
-
-  componentDidMount() {
-
-  }
 
   render() {
     return (
@@ -42,7 +39,10 @@ export default class HomeScreen extends React.Component {
 
           <View style={styles.getStartedContainer}>
             {this._maybeRenderDevelopmentModeWarning()}
-
+            <Button
+              onPress={this._handleSignOut}
+              title="sign out"
+            />
             <Text style={styles.getStartedText}>Get started by going nuts</Text>
 
             <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
@@ -95,6 +95,11 @@ export default class HomeScreen extends React.Component {
     }
   }
 
+  _handleSignOut = () => {
+    core.signOutAccount();
+    this.props.navigation.navigate('Auth');
+  }
+
   _handleLearnMorePress = () => {
     WebBrowser.openBrowserAsync('https://docs.expo.io/versions/latest/guides/development-mode');
   };
@@ -110,7 +115,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    backgroundColor: 'black',
   },
   developmentModeText: {
     marginBottom: 20,
