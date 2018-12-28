@@ -12,37 +12,77 @@ import {
 } from 'react-native';
 
 export default class WelcomeScreen extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      inputEmail: '',
-      inputPassword: '',
-    }
+  state = {
+    inputEmail: '',
+    inputPassword: '',
+    authError: '',
+  };
+
+  componentDidMount() {
+
   }
+
   render() {
+    // TODO: break out below views?
     return (
       <View style={styles.container}>
-        <Text>Welcome to an App!</Text>
-        <View style={styles.inputEmail}>
-          <Text style={{ width: 100 }}>Email</Text>
-          <TextInput
-          style={{ width: 100, backgroundColor: 'lightgray' }}
-          onChangeText={(inputEmail) => this.setState({ inputEmail })}
-          value={this.state.inputEmail}/>
+        <Text>Welcome to a Generic React Native Tracker App!</Text>
+        <View style={styles.inputContainer}>
+          <Text>Create An Account</Text>
+          <View style={styles.inputEmail}>
+            <Text style={{ width: 100 }}>Email</Text>
+            <TextInput
+              autoCapitalize={false}
+              style={{ width: 100, backgroundColor: 'lightgray' }}
+              onChangeText={(inputEmail) => this.setState({ inputEmail })}
+              value={this.state.inputEmail}/>
+          </View>
+          <View style={styles.inputEmail}>
+            <Text style={{ width: 100 }}>Password</Text>
+            <TextInput
+              autoCapitalize={false}
+              style={{ width: 100, backgroundColor: 'lightgray' }}
+              onChangeText={(inputPassword) => this.setState({ inputPassword })}
+              value={this.state.inputPassword}/>
+          </View>
+          <Button
+            onPress={this._createAccount}
+            title="Create Account"
+          />
+          <Button
+            onPress={this._signInAccount}
+            title="Sign In"
+          />
         </View>
-        <View style={styles.inputEmail}>
-          <Text style={{ width: 100 }}>Password</Text>
-          <TextInput
-          style={{ width: 100, backgroundColor: 'lightgray' }}
-          onChangeText={(inputPassword) => this.setState({ inputPassword })}
-          value={this.state.inputPassword}/>
+        <View>
+          <Text style={{ color: 'red', height: 50, width: 300 }}>{this.state.authError}</Text>
         </View>
-        <Button
-          onPress={this.props.onSignIn}
-          title="Simulate Log In"
-        />
       </View>
     )
+  }
+
+  _createAccount = () => {
+    this.props.createAccount(this.state.inputEmail, this.state.inputPassword)
+      .then(success => {
+        this.props.finishSignIn();
+      })
+      .catch((err) => {
+        this.props.onError(err)
+        let message = err.toString();
+        this.setState({authError: message});
+      });
+  }
+
+  _signInAccount = () => {
+    this.props.signInAccount(this.state.inputEmail, this.state.inputPassword)
+      .then(success => {
+        this.props.finishSignIn();
+      })
+      .catch((err) => {
+        this.props.onError(err)
+        let message = err.toString();
+        this.setState({authError: message});
+      });
   }
 }
 
@@ -54,11 +94,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'column',
   },
+  inputContainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    maxHeight: 200,
+  },
   inputEmail: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    maxHeight: 20,
+    maxHeight: 30,
   },
   developmentModeText: {
     marginBottom: 20,

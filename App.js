@@ -2,9 +2,11 @@ import React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
-import firebase from 'react-native-firebase';
+
 import WelcomeScreen from './screens/WelcomeScreen';
 
+import Core from './services/Core'
+const core = new Core();
 
 export default class App extends React.Component {
   state = {
@@ -13,11 +15,6 @@ export default class App extends React.Component {
   };
 
   componentDidMount() {
-    let auth = firebase.auth();
-    auth.onUserChanged((user) => {
-      // console.log('now we have an anon user', user)
-    })
-    auth.signInAnonymously();
   }
 
   render() {
@@ -32,7 +29,10 @@ export default class App extends React.Component {
     } else if (this.state.isLoadingComplete && !this.state.isSignedIn) {
       return (
         <WelcomeScreen
-          onSignIn={this._handleFinishSignIn}
+          finishSignIn={this._handleFinishSignIn}
+          createAccount={this._handleCreateAccount}
+          signInAccount={this._handleSignInAccount}
+          onError={this._handleWelcomeError}
          />
       );
     } else {
@@ -43,6 +43,18 @@ export default class App extends React.Component {
         </View>
       );
     }
+  }
+
+  _handleWelcomeError = (errObj) => {
+    core.errorHandler('Welcome screen: ' + errObj)
+  }
+
+  _handleCreateAccount = (email, password) => {
+    return core.createAccount(email, password);
+  }
+
+  _handleSignInAccount = (email, password) => {
+    return core.signInAccount(email, password);
   }
 
   _handleFinishSignIn = () => {
