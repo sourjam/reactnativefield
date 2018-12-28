@@ -60,7 +60,7 @@ export default class CoreService {
   getCurrentUser() {
     return auth.currentUser;
   }
-  
+
   errorHandler(errObj) {
     _log('Error: ' +errObj)
   }

@@ -93,3 +93,9 @@
   - Now it's time to create a simple welcome screen that can create an email/pass login for Firebase
   - Fiddled with MainTabNavigator and it seems that the order of the tabs on the bottom are directly related to the order they are pushed into the navigator. However, I do want a separate screen before even showing the app itself.
   - Styling with React Native is certainly not CSS. Nested Flex is kinda weird here. I had to set a maxHeight on a nested flex section for the input label and input field. Otherwise it forced the entire element to the height of the screen.
+
+  12.28.2018
+  - Added sign in and create account via Firebase Auth. Was running into issues where context was being lost inside of the WelcomeScreen. I'm still not sure what happened there but instead just created some methods to pass down into it.
+  - I'm trying to focus on the functional core/imperative shell development style. Where the I now have a CoreService that handles data. Which then has exposed methods that will be used by React to handle changing the view. Actual business logic should only live inside of the Core.
+    - Most of the additional functions inside of screens should just be focused on handling the passing in and passing out of data
+  - Now that the welcome screen is functional and users are created in Firebase, I'm going to create an Onboarding step and store user data inside of Firebase to check whether they should see the Onboarding step on login 

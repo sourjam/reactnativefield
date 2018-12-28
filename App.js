@@ -15,6 +15,9 @@ export default class App extends React.Component {
   };
 
   componentDidMount() {
+    // if (!core.getCurrentUser().isAnonymous) {
+    //   this.setState({ isSignedIn: true })
+    // }
   }
 
   render() {
@@ -46,7 +49,7 @@ export default class App extends React.Component {
   }
 
   _handleWelcomeError = (errObj) => {
-    core.errorHandler('Welcome screen: ' + errObj)
+    core.errorHandler('Welcome screen: ' + errObj);
   }
 
   _handleCreateAccount = (email, password) => {

@@ -23,25 +23,25 @@ export default class WelcomeScreen extends React.Component {
   }
 
   render() {
-    // TODO: break out below views?
+    // TODO break inline styles out
     return (
       <View style={styles.container}>
         <Text>Welcome to a Generic React Native Tracker App!</Text>
         <View style={styles.inputContainer}>
-          <Text>Create An Account</Text>
           <View style={styles.inputEmail}>
-            <Text style={{ width: 100 }}>Email</Text>
+            <Text style={{ width: 70 }}>Email</Text>
             <TextInput
               autoCapitalize={false}
-              style={{ width: 100, backgroundColor: 'lightgray' }}
+              style={{ width: 150, backgroundColor: 'lightgray' }}
               onChangeText={(inputEmail) => this.setState({ inputEmail })}
               value={this.state.inputEmail}/>
           </View>
           <View style={styles.inputEmail}>
-            <Text style={{ width: 100 }}>Password</Text>
+            <Text style={{ width: 70 }}>Password</Text>
             <TextInput
               autoCapitalize={false}
-              style={{ width: 100, backgroundColor: 'lightgray' }}
+              style={{ width: 150, backgroundColor: 'lightgray' }}
+              secureTextEntry={true}
               onChangeText={(inputPassword) => this.setState({ inputPassword })}
               value={this.state.inputPassword}/>
           </View>
@@ -53,6 +53,11 @@ export default class WelcomeScreen extends React.Component {
             onPress={this._signInAccount}
             title="Sign In"
           />
+          <Button
+            color='red'
+            onPress={this.props.finishSignIn}
+            title="Dev: Skip Sign In"
+          />
         </View>
         <View>
           <Text style={{ color: 'red', height: 50, width: 300 }}>{this.state.authError}</Text>
@@ -61,16 +66,18 @@ export default class WelcomeScreen extends React.Component {
     )
   }
 
+  _handleAuthError = (err) => {
+    this.props.onError(err)
+    let message = err.toString();
+    this.setState({authError: message});
+  }
+
   _createAccount = () => {
     this.props.createAccount(this.state.inputEmail, this.state.inputPassword)
       .then(success => {
         this.props.finishSignIn();
       })
-      .catch((err) => {
-        this.props.onError(err)
-        let message = err.toString();
-        this.setState({authError: message});
-      });
+      .catch(this._handleAuthError);
   }
 
   _signInAccount = () => {
@@ -78,11 +85,7 @@ export default class WelcomeScreen extends React.Component {
       .then(success => {
         this.props.finishSignIn();
       })
-      .catch((err) => {
-        this.props.onError(err)
-        let message = err.toString();
-        this.setState({authError: message});
-      });
+      .catch(this._handleAuthError);
   }
 }
 
